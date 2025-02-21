@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль</title>
+    <style>
+        /* Общие стили */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Занимаем всю высоту экрана */
+        }
+
+        header {
+            background-color: #1c1c1c;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            color: #3897f0;
+            text-align: center;
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 0;
+            margin: 10px 0 0;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #3897f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1; /* Растягиваем контейнер на всю доступную высоту */
+        }
+
+        /* Стили профиля */
+        .profile-header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .profile-title {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+            justify-items: center;
+        }
+
+        .photo-item {
+            background: #1c1c1c;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .photo-info h3 {
+            margin: 0 0 10px;
+            color: #ffffff;
+            font-size: 1.4rem;
+        }
+
+        .photo-info p {
+            margin: 0;
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-more {
+            background: transparent;
+            border-color: #3897f0;
+            color: #3897f0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1c1c1c;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .modal-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-info h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.2rem;
+        }
+
+        .modal-info p {
+            margin: 0;
+            color: #b0b0b0;
+        }
+
+        .likes-section, .comments-section {
+            background-color: #2c2c2c;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .likes-section h4, .comments-section h4 {
+            margin: 0 0 10px;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comment-item {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .comment-author {
+            color: #3897f0;
+            font-weight: bold;
+        }
+
+        .comment-text {
+            color: #e0e0e0;
+        }
+
+        .btn-upload:hover {
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+        }
+
+        .btn-more:hover {
+            background: rgba(56, 151, 240, 0.1);
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .btn-text {
+            white-space: nowrap;
+        }
+
+        .no-photos {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            background-color: #1c1c1c;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto; /* Прижимаем футер к низу */
+        }
+
+        footer p {
+            margin: 0;
+            color: #e0e0e0;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .photo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .photo-item {
+                max-width: 100%;
+            }
+        }
+
+        /* Стили для кнопок автора */
+        .author-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-edit {
+            background: #3897f0;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2878c6;
+        }
+
+        .btn-delete:hover {
+            background: #cc0000;
+        }
+
+        /* Модальное окно редактирования */
+        #editModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        #editModal .modal-content {
+            background-color: #1c1c1c;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        #editModal textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .btn-save {
+            background: #4CAF50;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-save:hover {
+            background: #45a049;
+        }
+
+        @media (max-width: 480px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Travel Explorer</h1>
+    <nav>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/places">Места</a></li>
+            <li><a href="/photos">Фотографии</a></li>
+            <li><a href="/routes">Маршруты</a></li>
+            <li><a href="/contact">Контакты</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="profile-header">
+        <h1 class="profile-title">Мой профиль</h1>
+    </div>
+
+    <div class="photo-grid" id="photoGrid">
+        <!-- Фотографии будут вставлены через JS -->
+    </div>
+
+    <div class="gallery-controls">
+        <div class="button-group">
+            <a href="/upload-photo" class="btn btn-upload">
+                <span class="btn-icon">+</span>
+                <span class="btn-text">Добавить фото</span>
+            </a>
+            <button class="btn btn-more" id="showMoreBtn" onclick="getAllPhoto()">
+                <span class="btn-icon">›</span>
+                <span class="btn-text">Показать еще</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Детали фотографии</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img class="modal-image" id="modalImage" src="" alt="Фотография">
+                <div class="modal-info">
+                    <h3 id="modalAuthor"></h3>
+                    <p id="modalPlace"></p>
+                    <p id="modalDescription"></p>
+                    <div class="likes-section">
+                        <h4>Лайки: <span id="modalLikes"></span></h4>
+                    </div>
+                    <div class="comments-section">
+                        <h4>Комментарии:</h4>
+                        <div class="comments-list" id="modalComments"></div>
+                    </div>
+                    <!-- Кнопки для автора -->
+                    <div class="author-actions" id="authorActions" style="display: none;">
+                        <button class="btn btn-edit" id="editDescriptionBtn">Изменить описание</button>
+                        <button class="btn btn-delete" id="deletePhotoBtn">Удалить фото</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Изменить описание</h2>
+                <button class="close-btn" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editDescriptionInput" placeholder="Введите новое описание..." rows="4"></textarea>
+                <button class="btn btn-save" id="saveDescriptionBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+    <div class="no-photos" id="noPhotosMessage" style="display: none;">
+        <p>У вас пока нет фотографий</p>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2023 Travel Explorer. Все права защищены.</p>
+</footer>
+
+<script src="/person.js"></script>
+</body>
+</html>

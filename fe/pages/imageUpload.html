@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка Фото</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            width: 90%; /* Увеличена ширина формы */
+            max-width: 1200px; /* Ограничение на максимальную ширину */
+            background-color: #1c1c1c;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-right: 1px solid #333;
+        }
+
+        .left-panel img {
+            max-width: 100%;
+            max-height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .left-panel input {
+            display: none;
+        }
+
+        .upload-btn {
+            background-color: #3897f0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .upload-btn:hover {
+            background-color: #2878c6;
+        }
+
+        .right-panel {
+            flex: 2; /* Увеличено пространство для правой панели */
+            display: flex;
+            flex-direction: column;
+            padding: 30px; /* Увеличены отступы */
+        }
+
+        .right-panel input[type="text"], .right-panel textarea {
+            width: 90%;
+            padding: 15px; /* Увеличены внутренние отступы */
+            margin-bottom: 20px;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px; /* Увеличен размер шрифта */
+        }
+
+        .submit-btn {
+            background-color: #3897f0;
+            color: white;
+            border: none;
+            padding: 15px 30px; /* Увеличен размер кнопки */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: flex-end; /* Выровнено по правому краю */
+        }
+
+        .submit-btn:hover {
+            background-color: #2878c6;
+        }
+
+        .cityContainer {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            max-height: 60%;
+            overflow-y: auto;
+            background-color: rgba(28, 28, 28, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .place-item {
+            background-color: #2c2c2c;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .place-item h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .place-item p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<form id="imageForm" enctype="multipart/form-data" method="POST" style="width: 1000px">
+    <div class="container">
+        <div class="left-panel">
+            <label for="photoUpload" class="upload-btn">Загрузить фото</label>
+            <input type="file" id="photoUpload" name="image" accept="image/*" onchange="previewImage(event)">
+            <input type="hidden" id="selectedPlaceId" name="placeId">
+            <img id="preview" src="" alt="Предпросмотр фото" style="display: none;">
+        </div>
+
+        <div class="cityContainer" id="cityContainer"></div>
+
+        <div class="right-panel">
+            <div class="location-group">
+                <input type="text" id="location" name="location" placeholder="Добавить место">
+                <input type="hidden" id="selectedPlace" name="selectedPlace">
+                <button type="button" class="find-btn" onclick="findLocation()">Найти</button>
+            </div>
+            <textarea id="description" name="description" rows="5" placeholder="Введите описание..."></textarea>
+            <button type="submit" class="submit-btn">Опубликовать</button>
+        </div>
+    </div>
+</form>
+<script src="/pages/index.js"></script>
+<script type="module" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

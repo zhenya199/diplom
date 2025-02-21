@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Explorer</title>
+    <link rel="stylesheet" href="/pages/style.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <h1 class="app-title">Travel Explorer</h1>
+        <section class="search">
+            <input type="text" placeholder="Поиск мест или маршрутов..." id="search-input"
+                   onkeypress="handleEnter(event)">
+        </section>
+
+        <nav class="links">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/places">Места</a></li>
+                <li><a href="/photos">Фотографии</a></li>
+                <li><a href="/routes">Маршруты</a></li>
+                <li><a href="/contact">Контакты</a></li>
+                <li><a href="/account" id="account" onclick="getPerson()">Личный кабинет</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <section class="banner">
+        <!-- Слайдер с изображениями -->
+    </section>
+
+    <section class="popular-places">
+        <h2>Популярные места</h2>
+        <div class="card-container">
+            <!-- Карточки с местами -->
+            <div class="card">
+                <img src="place1.jpg" alt="Место 1">
+                <h3>Место 1</h3>
+                <p>Краткое описание...</p>
+                <a href="/places/1">Подробнее</a>
+            </div>
+            <!-- Другие карточки -->
+        </div>
+    </section>
+
+    <section class="recent-photos">
+        <h2>Недавние фотографии</h2>
+        <div class="photo-gallery">
+            <img src="photo1.jpg" alt="Фотография 1">
+        </div>
+    </section>
+
+    <section class="popular-routes">
+        <h2>Популярные маршруты</h2>
+        <div class="card-container">
+            <div class="card">
+                <h3>Маршрут 1</h3>
+                <p>Краткое описание...</p>
+                <a href="/routes/1">Посмотреть маршрут</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 Travel Explorer. Все права защищены.</p>
+    <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Twitter</a></li>
+    </ul>
+</footer>
+
+<script src="/pages/index.js"></script> <!-- Подключение JavaScript -->
+</body>
+</html>
