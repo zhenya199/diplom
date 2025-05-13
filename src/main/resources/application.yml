@@ -1,0 +1,37 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+  application:
+    name: map
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eugene
+    username: mihail
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+geoapify:
+  secret: ${GEOAPIFY_SECRET}
+server:
+  port: 8081
+saving_dir: ${SAVING_DIR}
