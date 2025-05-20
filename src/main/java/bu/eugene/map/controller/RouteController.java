@@ -33,4 +33,11 @@ public class RouteController {
     public Page<RouteDto> findByPerson(@RequestHeader("Authorization") String token, Pageable pageable) {
         return routeService.findAllByPerson(token, pageable);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteRoute(@RequestHeader("Authorization") String token,
+                                         @PathVariable("id") Integer id) {
+        routeService.deleteRoute(token, id);
+        return ResponseEntity.ok().build();
+    }
 }

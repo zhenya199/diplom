@@ -32,6 +32,11 @@ public class PlaceController {
         return placeService.getAllPlaces();
     }
 
+    @GetMapping("/allWithImages")
+    public List<PlaceDto> getAllPlacesWithImages() {
+        return placeService.getAllPlacesWithImages();
+    }
+
     @GetMapping("/findByParam")
     public Page<PlaceDto> findPlacesByParam(Pageable pageable, @RequestParam("value") String param) {
         return placeService.findByParam(pageable, param);

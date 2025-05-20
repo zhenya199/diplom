@@ -34,7 +34,8 @@ public class CommentService {
             Person currentUser = personService.getPersonFromToken(token);
             Optional<CommentEntity> comment = commentRepository.findById(id);
             if(comment.isPresent()) {
-                if (comment.get().getAuthor().equals(currentUser)) {
+                if (comment.get().getAuthor().equals(currentUser) ||
+                currentUser.getRole().equals("ADMIN")) {
                     commentRepository.delete(comment.get());
                 } else {
                    throw new CannotDeleteCommentException("Вы не можете удалить коментарий");

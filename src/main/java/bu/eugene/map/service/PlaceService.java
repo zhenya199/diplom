@@ -8,6 +8,7 @@ import bu.eugene.map.repository.PlaceRepository;
 import bu.eugene.map.service.api.GeoapifyApiService;
 import bu.eugene.map.util.Dto2EntityConverter;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -52,9 +53,19 @@ public class PlaceService {
             return places.map(placeMapper::place2Dto);
         }
 
+        @Transactional
         public List<PlaceDto> getAllPlaces() {
             return placeRepository.findAll()
                     .stream()
+                    .map(placeMapper::place2Dto)
+                    .collect(Collectors.toList());
+        }
+
+        @Transactional
+        public List<PlaceDto> getAllPlacesWithImages() {
+            return placeRepository.findAll()
+                    .stream()
+                    .filter(place -> !place.getImages().isEmpty())
                     .map(placeMapper::place2Dto)
                     .collect(Collectors.toList());
         }
@@ -92,7 +103,7 @@ public class PlaceService {
             throw new PlaceNotFoundException("Упс. Похоже такого места не существует.");
         }
 
-        private void createPlaceDtoFromJson(JSONArray results, int i, PlaceDto placeDto) {
+        private PlaceDto createPlaceDtoFromJson(JSONArray results, int i, PlaceDto placeDto) {
             JSONObject result = results.getJSONObject(i);
 
             if(result.has("country_code") &&
@@ -108,5 +119,6 @@ public class PlaceService {
                 placeDto.setSuburb(result.getString("suburb"));
             }
         }
+            return placeDto;
      }
 }

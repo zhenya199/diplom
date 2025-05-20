@@ -84,10 +84,10 @@ public class ImageService {
         public ResponseEntity<?> deletePhoto(Person author, Integer imageId) {
                 ImageEntity image = getImageById(imageId);
 
-                if (canPersonDeletePhoto(author, image)) {
+                if (canPersonDeletePhoto(author, image) || author.getRole().equals("ADMIN")) {
                         imageRepository.delete(image);
                 } else {
-                        throw new AccessDeniedException("You can delete only your images");
+                        throw new AccessDeniedException("Вы не можете удалить чужое фото");
                 }
                 return ResponseEntity.ok().build();
         }

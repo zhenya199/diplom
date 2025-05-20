@@ -1,6 +1,8 @@
 package bu.eugene.map.service;
 
 import bu.eugene.map.dto.RouteDto;
+import bu.eugene.map.exception.CannotDeleteRouteException;
+import bu.eugene.map.exception.RouteNotFoundException;
 import bu.eugene.map.model.Person;
 import bu.eugene.map.model.Place;
 import bu.eugene.map.model.RouteEntity;
@@ -32,6 +34,20 @@ public class RouteService {
         entity.setAuthor(author);
         entity.setPlace(place);
         routeRepository.save(entity);
+    }
+
+    public void deleteRoute(String token, Integer id) {
+        Person currentUser = personService.getPersonFromToken(token);
+        RouteEntity routeEntity = routeRepository.findById(id)
+                .orElseThrow(() -> new RouteNotFoundException("Маршрут не найден"));
+
+        if (routeEntity.getAuthor().equals(currentUser) ||
+                currentUser.getRole().equals("ADMIN")) {
+           routeRepository.delete(routeEntity);
+        } else {
+            throw new CannotDeleteRouteException("Ошибка удаления маршрута");
+        }
+
     }
 
     public Page<RouteDto> findAllByPerson(String token, Pageable pageable) {

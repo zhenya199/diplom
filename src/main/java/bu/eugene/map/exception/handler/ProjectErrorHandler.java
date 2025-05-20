@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.springframework.http.HttpStatus.*;
+
 @ControllerAdvice
 @Slf4j
 public class ProjectErrorHandler {
@@ -23,25 +25,37 @@ public class ProjectErrorHandler {
         @ExceptionHandler(UsernameIsTakenException.class)
         public ResponseEntity<?> usernameIsTakenHandler(UsernameIsTakenException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
         }
 
         @ExceptionHandler(EntityNotFoundException.class)
         public ResponseEntity<?> entityNotFoundExceptionHandler(EntityNotFoundException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
+        }
+
+        @ExceptionHandler(RouteNotFoundException.class)
+        public ResponseEntity<?> routeNotFoundExceptionHandler(RouteNotFoundException e) {
+            log.info(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
+        }
+
+        @ExceptionHandler(CannotDeleteRouteException.class)
+        public ResponseEntity<?> cannotDeleteRouteExceptionHandler(CannotDeleteRouteException e) {
+            log.info(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
         }
 
         @ExceptionHandler(PasswordDoesntMatchException.class)
         public ResponseEntity<?> passwordDoesntMatchExceptionHandler(PasswordDoesntMatchException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
         }
 
         @ExceptionHandler(PlaceNotFoundException.class)
         public ResponseEntity<?> placeNotFoundExceptionHandler(PlaceNotFoundException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
         }
 
         @ExceptionHandler(JWTVerificationException.class)
@@ -54,30 +68,30 @@ public class ProjectErrorHandler {
         public ResponseEntity<?> ConstraintViolationExceptionHandler(ConstraintViolationException e) {
             String message = e.getConstraintViolations().stream().findFirst().get().getMessage();
             log.error(message);
-            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(message, BAD_REQUEST);
         }
 
         @ExceptionHandler(AccessDeniedException.class)
         public ResponseEntity<?> accessDeniedExceptionHandler(AccessDeniedException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
         }
 
         @ExceptionHandler(CannotDeleteLikeException.class)
         public ResponseEntity<?> cannotDeleteLikeExceptionHandler(CannotDeleteLikeException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
         }
 
         @ExceptionHandler(MaxUploadSizeExceededException.class)
         public ResponseEntity<?> cannotDeleteLikeExceptionHandler(MaxUploadSizeExceededException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>("фотография весит слишком много! Максимальный размер 5мб", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("фотография весит слишком много! Максимальный размер 5мб", BAD_REQUEST);
         }
 
     @ExceptionHandler(CannotDeleteCommentException.class)
     public ResponseEntity<?> cannotDeleteCommentExceptionHandler(CannotDeleteCommentException e) {
         log.info(e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(e.getMessage(), FORBIDDEN);
     }
 }
