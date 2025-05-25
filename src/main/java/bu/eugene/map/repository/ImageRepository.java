@@ -24,7 +24,12 @@ public interface ImageRepository  extends JpaRepository<ImageEntity, Integer> {
         @Query(value = "SELECT i FROM ImageEntity i WHERE i.person.username = :username")
         Page<ImageEntity> findAllByAuthorUsername(Pageable pageable, @Param("username") String username);
 
-        @Query("SELECT i FROM ImageEntity i WHERE i.place.name LIKE %:name%")
+        @Query(
+                value = "SELECT * FROM image_entity i JOIN place p ON i.place_id = p.id WHERE p.name ILIKE CONCAT('%', :name, '%')",
+                countQuery = "SELECT count(*) FROM image_entity i JOIN place p ON i.place_id = p.id WHERE p.name ILIKE CONCAT('%', :name, '%')",
+                nativeQuery = true
+        )
         Page<ImageEntity> findByPlaceNameContaining(Pageable pageable, @Param("name") String name);
+
 
 }

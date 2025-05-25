@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RouteRepository extends JpaRepository<RouteEntity, Integer> {
 
     @Query("SELECT re FROM RouteEntity  re WHERE re.author.id=:userId")
-    Page<RouteEntity> findAllByUserId(Integer userId, Pageable pageable);
+    List<RouteEntity> findAllByUserId(Integer userId, Pageable pageable);
 
 
 }

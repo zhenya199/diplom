@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tourist_map")
 @Getter
@@ -31,4 +33,11 @@ public class RouteEntity {
         @ManyToOne
         @JoinColumn(name = "user_id")
         private Person author;
+
+        @ElementCollection
+        private List<String> pathsToImages;
+
+        public void addImage(String path) {
+                pathsToImages.add(path);
+        }
 }

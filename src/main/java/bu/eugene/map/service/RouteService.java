@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class RouteService {
     private final Entity2DtoConverter entity2DtoConverter;
     private final PlaceService placeService;
     private final PersonService personService;
+    private final ImageService imageService;
 
 
     @Transactional
@@ -36,10 +40,22 @@ public class RouteService {
         routeRepository.save(entity);
     }
 
+    public RouteDto addImage(Integer routeId, MultipartFile image) {
+        RouteEntity route = getRouteById(routeId);
+        String path = imageService.saveImagesLocal(image);
+        route.addImage(path);
+        RouteEntity newRoute = routeRepository.save(route);
+        return entity2DtoConverter.convertRouteEntity2Dto(newRoute);
+    }
+
+    public RouteDto findRouteById(Integer routeId) {
+        RouteEntity route = getRouteById(routeId);
+        return entity2DtoConverter.convertRouteEntity2Dto(route);
+    }
+
     public void deleteRoute(String token, Integer id) {
         Person currentUser = personService.getPersonFromToken(token);
-        RouteEntity routeEntity = routeRepository.findById(id)
-                .orElseThrow(() -> new RouteNotFoundException("Маршрут не найден"));
+        RouteEntity routeEntity = getRouteById(id);
 
         if (routeEntity.getAuthor().equals(currentUser) ||
                 currentUser.getRole().equals("ADMIN")) {
@@ -50,14 +66,21 @@ public class RouteService {
 
     }
 
-    public Page<RouteDto> findAllByPerson(String token, Pageable pageable) {
+    public List<RouteDto> findAllByPerson(String token, Pageable pageable) {
         Person author = personService.getPersonFromToken(token);
-        return routeRepository.findAllByUserId(author.getId(), pageable)
-                .map(entity2DtoConverter::convertRouteEntity2Dto);
+        return routeRepository.findAllByUserId(author.getId(), pageable).stream()
+                .map(entity2DtoConverter::convertRouteEntity2Dto)
+                .toList();
     }
 
     public Page<RouteDto> getRoutePage(Pageable pageable) {
         return routeRepository.findAll(pageable)
                 .map(entity2DtoConverter::convertRouteEntity2Dto);
+    }
+
+    private RouteEntity getRouteById(Integer routeId) {
+        RouteEntity route = routeRepository.findById(routeId)
+                .orElseThrow(() -> new RouteNotFoundException("Маршрут не найден"));
+        return route;
     }
 }

@@ -15,16 +15,12 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
 
     Optional<Place> findByPlaceId(String placeId);
 
-    Optional<Place> findByNameAndLatAndLonAndCountryAndTypeOfPlaceAndSuburb(String name,
-                                                                            Double lat,
-                                                                            Double lon,
-                                                                            String country,
-                                                                            String typeOfPlace,
-                                                                            String suburb);
-
-    @Query("SELECT p FROM Place p WHERE p.name ILIKE %:name% " +
-            "OR p.country ILIKE %:name% " +
-            "OR p.typeOfPlace ILIKE %:name% " +
-            "OR p.suburb ILIKE %:name%")
+    @Query(
+            value = "SELECT * FROM place p " +
+                    "WHERE p.name ILIKE CONCAT('%', :name, '%') " +
+                    "OR p.country ILIKE CONCAT('%', :name, '%') " +
+                    "OR p.type ILIKE CONCAT('%', :name, '%') " +
+                    "OR p.suburb ILIKE CONCAT('%', :name, '%')",
+            nativeQuery = true)
     Page<Place> findByParamIgnoreCase(Pageable pageable, @Param("name") String name);
 }

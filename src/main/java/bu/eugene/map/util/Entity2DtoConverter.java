@@ -31,6 +31,9 @@ public class Entity2DtoConverter {
                 .placeId(route.getPlace().getPlaceId())
                 .placeName(route.getPlace().getName())
                 .id(route.getId())
+                .lat(route.getPlace().getLat().toString())
+                .lon(route.getPlace().getLon().toString())
+                .pathsToImages(route.getPathsToImages())
                 .build();
     }
 

@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.RouteMatcher;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/route")
@@ -24,13 +27,24 @@ public class RouteController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/image/{id}")
+    public RouteDto addImageToRoute(@PathVariable("id") Integer routeId,
+                                             @RequestParam("image") MultipartFile image) {
+        return routeService.addImage(routeId, image);
+    }
+
     @GetMapping("/all")
     public Page<RouteDto> getRoutes(Pageable pageable) {
         return routeService.getRoutePage(pageable);
     }
 
+    @GetMapping("/{id}")
+    public RouteDto getRoute(@PathVariable Integer id) {
+        return routeService.findRouteById(id);
+    }
+
     @GetMapping("/all/person")
-    public Page<RouteDto> findByPerson(@RequestHeader("Authorization") String token, Pageable pageable) {
+    public List<RouteDto> findByPerson(@RequestHeader("Authorization") String token, Pageable pageable) {
         return routeService.findAllByPerson(token, pageable);
     }
 
