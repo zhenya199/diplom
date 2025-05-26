@@ -38,7 +38,7 @@ public class PlaceController {
     }
 
     @GetMapping("/findByParam")
-    public Page<PlaceDto> findPlacesByParam(Pageable pageable, @RequestParam("value") String param) {
-        return placeService.findByParam(pageable, param);
+    public PlaceDto findPlacesByParam(@RequestParam("value") String param) {
+        return placeService.findByParam(param);
     }
 }

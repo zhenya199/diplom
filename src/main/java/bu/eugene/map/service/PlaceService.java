@@ -48,9 +48,11 @@ public class PlaceService {
             );
         }
 
-        public Page<PlaceDto> findByParam(Pageable pageable, String param) {
-            Page<Place> places = placeRepository.findByParamIgnoreCase(pageable, param);
-            return places.map(placeMapper::place2Dto);
+        public PlaceDto findByParam(String param) {
+            Place place = placeRepository.findByParamIgnoreCase(param)
+                    .orElseThrow(() -> new PlaceNotFoundException("ошибка поиска места"));
+
+            return placeMapper.place2Dto(place);
         }
 
         @Transactional
