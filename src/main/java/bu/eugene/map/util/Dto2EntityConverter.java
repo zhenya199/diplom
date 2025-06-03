@@ -35,7 +35,11 @@ public class Dto2EntityConverter {
     public Place convertPlaceDto2PlaceEntity(PlaceDto placeDto) {
         Place place = new Place();
         modelMapper.map(placeDto, place);
-        place.setName(placeDto.getSuburb());
+        if (placeDto.getSuburb() != null) {
+            place.setName(placeDto.getSuburb());
+        } else {
+            place.setName(placeDto.getName());
+        }
         return place;
     }
 

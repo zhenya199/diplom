@@ -16,8 +16,14 @@ public class CommentController {
         private final CommentService commentService;
 
         @PostMapping("/new")
-        public ResponseEntity<?> addComment(@RequestBody CommentDto comment) {
+        public ResponseEntity<?> addCommentToImage(@RequestBody CommentDto comment) {
                 commentService.addComment(comment);
+                return ResponseEntity.ok().build();
+        }
+
+        @PostMapping("/new/route")
+        public ResponseEntity<?> addCommentToRoute(@RequestBody CommentDto comment) {
+                commentService.addCommentToRoute(comment);
                 return ResponseEntity.ok().build();
         }
 

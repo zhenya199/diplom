@@ -48,7 +48,7 @@ public class RouteService {
         return entity2DtoConverter.convertRouteEntity2Dto(newRoute);
     }
 
-    public RouteDto findRouteById(Integer routeId) {
+    public RouteDto findRouteDtoById(Integer routeId) {
         RouteEntity route = getRouteById(routeId);
         return entity2DtoConverter.convertRouteEntity2Dto(route);
     }
@@ -66,6 +66,11 @@ public class RouteService {
 
     }
 
+    public RouteEntity getRouteById(Integer routeId) {
+        return routeRepository.findById(routeId)
+                .orElseThrow(() -> new RouteNotFoundException("Маршрут не найден"));
+    }
+
     public List<RouteDto> findAllByPerson(String token, Pageable pageable) {
         Person author = personService.getPersonFromToken(token);
         return routeRepository.findAllByUserId(author.getId(), pageable).stream()
@@ -76,11 +81,5 @@ public class RouteService {
     public Page<RouteDto> getRoutePage(Pageable pageable) {
         return routeRepository.findAll(pageable)
                 .map(entity2DtoConverter::convertRouteEntity2Dto);
-    }
-
-    private RouteEntity getRouteById(Integer routeId) {
-        RouteEntity route = routeRepository.findById(routeId)
-                .orElseThrow(() -> new RouteNotFoundException("Маршрут не найден"));
-        return route;
     }
 }

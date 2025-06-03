@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -19,5 +20,6 @@ public class RouteDto {
         private String lat;
         private String lon;
         private String placeId;
+        private List<CommentDto> comments = new ArrayList<>();
         private List<String> pathsToImages;
 }

@@ -1,13 +1,11 @@
 package bu.eugene.map.controller;
 
-import bu.eugene.map.dto.PlaceDto;
 import bu.eugene.map.dto.RouteDto;
 import bu.eugene.map.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.RouteMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +38,7 @@ public class RouteController {
 
     @GetMapping("/{id}")
     public RouteDto getRoute(@PathVariable Integer id) {
-        return routeService.findRouteById(id);
+        return routeService.findRouteDtoById(id);
     }
 
     @GetMapping("/all/person")

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -16,5 +18,6 @@ public class CommentDto {
         private String authorImage;
         private String value;
         private Integer image;
+        private Integer route;
         private LocalDateTime createdAt;
 }

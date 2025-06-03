@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,9 @@ public class RouteEntity {
 
         @ElementCollection
         private List<String> pathsToImages;
+
+        @OneToMany(mappedBy = "route")
+        private List<CommentEntity> comments = new ArrayList<>();
 
         public void addImage(String path) {
                 pathsToImages.add(path);

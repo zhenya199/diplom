@@ -34,6 +34,7 @@ public class Entity2DtoConverter {
                 .lat(route.getPlace().getLat().toString())
                 .lon(route.getPlace().getLon().toString())
                 .pathsToImages(route.getPathsToImages())
+                .comments(route.getComments().stream().map(this::convertCommentEntity2Dto).toList())
                 .build();
     }
 
@@ -50,7 +51,7 @@ public class Entity2DtoConverter {
            imageDto.addLike(convertLikeEntity2Dto(like));
        }
        for(CommentEntity comment : image.getComments()) {
-           imageDto.addComment(convertCommentEntity2Dto(comment));
+           imageDto.addComment(convertCommentEntity2DtoForImage(comment));
        }
        imageDto.setPathToFile(image.getPathToFile());
        return imageDto;
@@ -64,7 +65,7 @@ public class Entity2DtoConverter {
                 .build();
     }
 
-    public CommentDto convertCommentEntity2Dto(CommentEntity comment) {
+    public CommentDto convertCommentEntity2DtoForImage(CommentEntity comment) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .value(comment.getText())
@@ -72,6 +73,17 @@ public class Entity2DtoConverter {
                 .authorImage(comment.getAuthor().getPathToProfileImage())
                 .author(comment.getAuthor().getUsername())
                 .image(comment.getImage().getId())
+                .build();
+    }
+
+    public CommentDto convertCommentEntity2Dto(CommentEntity comment) {
+        return CommentDto.builder()
+                .id(comment.getId())
+                .value(comment.getText())
+                .createdAt(comment.getCreatedAt())
+                .authorImage(comment.getAuthor().getPathToProfileImage())
+                .author(comment.getAuthor().getUsername())
+                .route(comment.getRoute().getId())
                 .build();
     }
 

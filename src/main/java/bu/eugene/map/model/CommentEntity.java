@@ -37,4 +37,8 @@ public class CommentEntity {
         @ManyToOne
         @JoinColumn(name = "image_id")
         private ImageEntity image;
+
+        @ManyToOne
+        @JoinColumn(name = "route_id")
+        private RouteEntity route;
 }

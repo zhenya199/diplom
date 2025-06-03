@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
 @Service
@@ -21,11 +20,20 @@ public class CommentService {
         private final Dto2EntityConverter dto2EntityConverter;
         private final ImageService imageService;
         private final PersonService personService;
+        private final RouteService routeService;
 
         @Transactional
         public void addComment(CommentDto commentDto) {
             CommentEntity comment = dto2EntityConverter.convertCommentDto2CommentEntity(commentDto);
             comment.setImage(imageService.getImageById(commentDto.getImage()));
+            comment.setAuthor(personService.findByUsername(commentDto.getAuthor()));
+            commentRepository.save(comment);
+        }
+
+        @Transactional
+        public void addCommentToRoute(CommentDto commentDto) {
+            CommentEntity comment = dto2EntityConverter.convertCommentDto2CommentEntity(commentDto);
+            comment.setRoute(routeService.getRouteById(commentDto.getRoute()));
             comment.setAuthor(personService.findByUsername(commentDto.getAuthor()));
             commentRepository.save(comment);
         }
