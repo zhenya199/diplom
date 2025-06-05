@@ -7,6 +7,7 @@ import bu.eugene.map.mapper.ImageMapper;
 import bu.eugene.map.model.ImageEntity;
 import bu.eugene.map.model.Person;
 import bu.eugene.map.model.Place;
+import bu.eugene.map.model.RouteEntity;
 import bu.eugene.map.repository.ImageRepository;
 import bu.eugene.map.util.Dto2EntityConverter;
 import bu.eugene.map.util.PersonRoleEnum;
@@ -26,6 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -53,6 +57,14 @@ public class ImageService {
                 image.setPathToFile(saveImagesLocal(imageDto.getImage()));
                 image.setPlace(place);
                 return imageMapper.image2Dto(imageRepository.save(image));
+        }
+
+        public ImageEntity saveImageWithoutPlace(ImageDto imageDto, RouteEntity route) {
+                ImageEntity image = new ImageEntity();
+                image.setPathToFile(saveImagesLocal(imageDto.getImage()));
+                image.setDescription(imageDto.getDescription());
+                image.setRoute(route);
+                return imageRepository.save(image);
         }
 
         public Page<ImageDto> getLikedImages(String token, Pageable pageable) {
@@ -120,40 +132,56 @@ public class ImageService {
         }
 
         public String saveImagesLocal(MultipartFile file) {
+                // 1. Проверяем, не пустой ли файл
+                if (file.isEmpty()) {
+                        throw new FileUploadException("Файл не может быть пустым");
+                }
 
+                // 2. Создаем директорию для загрузок
                 File uploadDir = new File(UPLOAD_DIR);
                 if (!uploadDir.exists()) {
-                        if (uploadDir.mkdirs()) {
-                                log.info("Директория для загрузки создана: {}", UPLOAD_DIR);
-                        } else {
+                        if (!uploadDir.mkdirs()) {
                                 log.error("Не удалось создать директорию: {}", UPLOAD_DIR);
                                 throw new FileUploadException("Ошибка при создании директории для загрузки");
                         }
+                        log.info("Директория для загрузки создана: {}", UPLOAD_DIR);
                 }
 
-                        log.info("start saving image");
-                        if(file.getSize() < MAX_FILE_SIZE) {
-                                String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-                                String baseName = FilenameUtils.getBaseName(
-                                        file.getOriginalFilename()).replaceAll(" ", "_");
-
-                                if (!Arrays.stream(IMAGE_EXTENSIONS).anyMatch(extension::equalsIgnoreCase)) {
-                                        throw new FileExtensionException("неверный формат файла, должен быть только: jpg, jpeg или png");
-                                }
-
-                                String uniqueFilename = createUniqueFilename(baseName, extension);
-                                File destinationFile = new File(UPLOAD_DIR, uniqueFilename);
-
-                                try {
-                                        file.transferTo(destinationFile);
-                                } catch (IOException e) {
-                                        log.error("smth went wrong while file saving");
-                                        throw new FileUploadException("ошибка загрузки файла");
-                                }
-                                return "/uploads/" + uniqueFilename;
-                        } else {
+                try {
+                        // 3. Проверяем размер файла
+                        if (file.getSize() > MAX_FILE_SIZE) {
                                 throw new MaxUploadSizeExceededException(MAX_FILE_SIZE);
                         }
+
+                        // 4. Проверяем расширение файла
+                        String originalFilename = file.getOriginalFilename();
+                        if (originalFilename == null || originalFilename.isEmpty()) {
+                                throw new FileUploadException("Имя файла не может быть пустым");
+                        }
+
+                        String extension = FilenameUtils.getExtension(originalFilename);
+                        String baseName = FilenameUtils.getBaseName(originalFilename).replaceAll(" ", "_");
+
+                        if (!Arrays.stream(IMAGE_EXTENSIONS).anyMatch(ext -> ext.equalsIgnoreCase(extension))) {
+                                throw new FileExtensionException("Неверный формат файла. Допустимые форматы: " +
+                                        String.join(", ", IMAGE_EXTENSIONS));
+                        }
+
+                        // 5. Создаем уникальное имя файла
+                        String uniqueFilename = createUniqueFilename(baseName, extension);
+                        File destinationFile = new File(uploadDir, uniqueFilename);
+
+                        try (InputStream inputStream = file.getInputStream()) {
+                                Files.copy(inputStream, destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        }
+
+                        log.info("Файл успешно сохранен: {}", destinationFile.getAbsolutePath());
+                        return "/uploads/" + uniqueFilename;
+
+                } catch (IOException e) {
+                        log.error("Ошибка при сохранении файла: {}", e.getMessage(), e);
+                        throw new FileUploadException("Ошибка загрузки файла: " + e.getMessage());
+                }
         }
 
         private  String createUniqueFilename(String baseName, String extension) {

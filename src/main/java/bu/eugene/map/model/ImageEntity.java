@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,11 +35,16 @@ public class ImageEntity {
         @CreationTimestamp
         private LocalDateTime createdAt;
 
+        @Length(max = 2000, message = "описание не может быть больше 2000 символов")
         private String description;
 
         @ManyToOne
         @JoinColumn(name = "place_id")
         private Place place;
+
+        @ManyToOne
+        @JoinColumn(name = "route_id")
+        private RouteEntity route;
 
         @OneToMany(mappedBy = "image", cascade = CascadeType.REMOVE)
         private List<LikeEntity> likes = new ArrayList<>();

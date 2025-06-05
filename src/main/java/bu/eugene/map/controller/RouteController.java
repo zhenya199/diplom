@@ -1,5 +1,6 @@
 package bu.eugene.map.controller;
 
+import bu.eugene.map.dto.ImageDto;
 import bu.eugene.map.dto.RouteDto;
 import bu.eugene.map.service.RouteService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class RouteController {
 
     @PutMapping("/image/{id}")
     public RouteDto addImageToRoute(@PathVariable("id") Integer routeId,
-                                             @RequestParam("image") MultipartFile image) {
-        return routeService.addImage(routeId, image);
+                                    @ModelAttribute ImageDto imageDto) {
+        return routeService.addImage(routeId, imageDto);
     }
 
     @GetMapping("/all")

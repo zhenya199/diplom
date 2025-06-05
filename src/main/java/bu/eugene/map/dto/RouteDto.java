@@ -22,4 +22,5 @@ public class RouteDto {
         private String placeId;
         private List<CommentDto> comments = new ArrayList<>();
         private List<String> pathsToImages;
+        private List<ImageDto> images = new ArrayList<>();
 }

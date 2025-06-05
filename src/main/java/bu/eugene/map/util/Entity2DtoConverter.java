@@ -35,17 +35,22 @@ public class Entity2DtoConverter {
                 .lon(route.getPlace().getLon().toString())
                 .pathsToImages(route.getPathsToImages())
                 .comments(route.getComments().stream().map(this::convertCommentEntity2Dto).toList())
+                .images(route.getImages().stream().map(this::convertImageEntity2Dto).toList())
                 .build();
     }
 
     public ImageDto convertImageEntity2Dto(ImageEntity image) {
        ImageDto imageDto = new ImageDto();
        imageDto.setId(image.getId());
-       imageDto.setPlace(
-               convertPlaceEntity2Dto(image.getPlace())
-       );
+       if (image.getPlace() != null) {
+           imageDto.setPlace(
+                   convertPlaceEntity2Dto(image.getPlace())
+           );
+       }
        imageDto.setPathToFile(image.getPathToFile());
-       imageDto.setAuthor(image.getPerson().getUsername());
+       if (image.getPerson() != null) {
+           imageDto.setAuthor(image.getPerson().getUsername());
+       }
        imageDto.setDescription(image.getDescription());
        for(LikeEntity like : image.getLikes()) {
            imageDto.addLike(convertLikeEntity2Dto(like));

@@ -25,7 +25,7 @@ public class PersonService {
         public Person findByUsername(String username) {
             return personRepository.findByUsername(username)
                     .orElseThrow(
-                            () -> new EntityNotFoundException("пользвоатель не найден")
+                            () -> new EntityNotFoundException("пользователь не найден")
                     );
         }
 

@@ -1,8 +1,10 @@
 package bu.eugene.map.service;
 
+import bu.eugene.map.dto.ImageDto;
 import bu.eugene.map.dto.RouteDto;
 import bu.eugene.map.exception.CannotDeleteRouteException;
 import bu.eugene.map.exception.RouteNotFoundException;
+import bu.eugene.map.model.ImageEntity;
 import bu.eugene.map.model.Person;
 import bu.eugene.map.model.Place;
 import bu.eugene.map.model.RouteEntity;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -40,10 +43,11 @@ public class RouteService {
         routeRepository.save(entity);
     }
 
-    public RouteDto addImage(Integer routeId, MultipartFile image) {
+    public RouteDto addImage(Integer routeId, ImageDto imageDto) {
         RouteEntity route = getRouteById(routeId);
-        String path = imageService.saveImagesLocal(image);
-        route.addImage(path);
+        ImageEntity saved = imageService.saveImageWithoutPlace(imageDto, route);
+        route.addImage(saved.getPathToFile());
+        route.addImageEntity(saved);
         RouteEntity newRoute = routeRepository.save(route);
         return entity2DtoConverter.convertRouteEntity2Dto(newRoute);
     }
