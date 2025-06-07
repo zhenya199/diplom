@@ -89,7 +89,7 @@ public class ImageService {
         }
 
         public Page<ImageDto> getAllImages(Pageable pageable) {
-                Page<ImageEntity> images = imageRepository.findAll(pageable);
+                Page<ImageEntity> images = imageRepository.findByPlaceIsNotNull(pageable);
                 return images.map(imageMapper::image2Dto);
         }
 

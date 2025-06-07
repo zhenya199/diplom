@@ -31,5 +31,7 @@ public interface ImageRepository  extends JpaRepository<ImageEntity, Integer> {
         )
         Page<ImageEntity> findByPlaceNameContaining(Pageable pageable, @Param("name") String name);
 
+        Page<ImageEntity> findByPlaceIsNotNull(Pageable pageable);
+
 
 }
