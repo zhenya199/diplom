@@ -2,6 +2,7 @@ package bu.eugene.map.mapper;
 
 import bu.eugene.map.dto.CommentDto;
 import bu.eugene.map.model.CommentEntity;
+import bu.eugene.map.model.RouteEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,4 +18,8 @@ public interface CommentMapper {
     CommentDto comment2Dto(CommentEntity comment);
 
     List<CommentDto> commentListToDtoList(List<CommentEntity> comments);
+
+    default Integer mapRouteToId(RouteEntity route) {
+        return route != null ? route.getId() : null;
+    }
 }
