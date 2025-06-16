@@ -21,6 +21,13 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
   servlet:
     multipart:
       max-file-size: 5MB

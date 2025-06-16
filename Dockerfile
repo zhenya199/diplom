@@ -11,5 +11,7 @@ COPY --from=builder /build/target/map-0.0.1-SNAPSHOT.jar app.jar
 RUN mkdir -p /app/uploads
 ENV SAVING_DIR=/app/uploads
 ENV GEOAPIFY_SECRET=${GEOAPIFY_SECRET}
+ENV CLIENT_ID=86ad74aa384547249f62827e4a190907
+ENV CLIENT_SECRET=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
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
