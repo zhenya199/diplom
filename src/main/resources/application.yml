@@ -12,20 +12,13 @@ spring:
   application:
     name: map
   datasource:
-    url: jdbc:postgresql://localhost:5432/eugene
-    username: mihail
-    password: postgres
+    url: jdbc:postgresql://dpg-d186vd8gjchc73drhs6g-a:5432/diplom_d21j
+    username: eugene
+    password: 6FC3SdEOm8216qwCi7JbPLmank9IdjMw
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${CLIENT_ID}
-            client-secret: ${CLIENT_SECRET}
   servlet:
     multipart:
       max-file-size: 5MB
