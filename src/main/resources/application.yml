@@ -14,9 +14,9 @@ spring:
   application:
     name: map
   datasource:
-    url: jdbc:postgresql://dpg-d186vd8gjchc73drhs6g-a:5432/diplom_d21j
-    username: eugene
-    password: 6FC3SdEOm8216qwCi7JbPLmank9IdjMw
+    url: ${DB}
+    username: ${US}
+    password: ${PAS}
   jpa:
     hibernate:
       ddl-auto: update
