@@ -35,5 +35,5 @@ spring:
 geoapify:
   secret: ${GEOAPIFY_SECRET}
 server:
-  port: 8081
+  port: 8080
 saving_dir: ${SAVING_DIR}
