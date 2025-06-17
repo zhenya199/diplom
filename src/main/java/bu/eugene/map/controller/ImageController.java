@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/image")
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin("*")
 public class ImageController {
 
         private final ImageService imageService;

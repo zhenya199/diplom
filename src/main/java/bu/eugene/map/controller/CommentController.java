@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/comment")
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin("*")
 public class CommentController {
 
         private final CommentService commentService;

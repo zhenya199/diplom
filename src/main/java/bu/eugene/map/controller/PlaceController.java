@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/place")
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin("*")
 public class PlaceController {
 
     private final PlaceService placeService;

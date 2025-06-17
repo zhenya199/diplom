@@ -30,7 +30,7 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(String username, String role){
-        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
+        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(600).toInstant());
         String token = JWT.create().withSubject("User details")
                 .withClaim("username", username)
                 .withClaim("role", role)

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/person")
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:8080")
+@CrossOrigin("*")
 public class PersonController {
 
         private final PersonService personService;
