@@ -19,6 +19,15 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @RequestMapping(method = RequestMethod.OPTIONS, value = "/auth")
+    public ResponseEntity<Void> handleAccountOptions() {
+        return ResponseEntity.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Authorization")
+                .build();
+    }
+
     @PostMapping(value = "/registration", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> registration(
             @RequestPart("username") String username,

@@ -17,6 +17,15 @@ public class LikeController {
         private final LikeService likeService;
         private final LikeFacade likeFacade;
 
+        @RequestMapping(method = RequestMethod.OPTIONS, value = "/lik")
+        public ResponseEntity<Void> handleAccountOptions() {
+                return ResponseEntity.ok()
+                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                        .header("Access-Control-Allow-Headers", "Authorization")
+                        .build();
+        }
+
         @PostMapping("/{id}")
         public ImageDto saveLike(@PathVariable("id") Integer imageId,
                                  @RequestHeader("Authorization") String token) {

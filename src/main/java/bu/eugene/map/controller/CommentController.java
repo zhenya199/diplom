@@ -15,6 +15,15 @@ public class CommentController {
 
         private final CommentService commentService;
 
+        @RequestMapping(method = RequestMethod.OPTIONS, value = "/comment")
+        public ResponseEntity<Void> handleAccountOptions() {
+                return ResponseEntity.ok()
+                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                        .header("Access-Control-Allow-Headers", "Authorization")
+                        .build();
+        }
+
         @PostMapping("/new")
         public ResponseEntity<?> addCommentToImage(@RequestBody CommentDto comment) {
                 commentService.addComment(comment);

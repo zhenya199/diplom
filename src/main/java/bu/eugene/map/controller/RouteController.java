@@ -20,6 +20,15 @@ public class RouteController {
 
     private final RouteService routeService;
 
+    @RequestMapping(method = RequestMethod.OPTIONS, value = "/route")
+    public ResponseEntity<Void> handleAccountOptions() {
+        return ResponseEntity.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Authorization")
+                .build();
+    }
+
     @PostMapping("/new")
     public ResponseEntity<?> createRoute(@RequestHeader("Authorization") String token, @RequestBody RouteDto routeDto) {
         routeService.crateRoute(routeDto, token);

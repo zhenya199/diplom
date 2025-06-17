@@ -21,6 +21,15 @@ public class ImageController {
         private final ImageService imageService;
         private final ImageFacade imageFacade;
 
+    @RequestMapping(method = RequestMethod.OPTIONS, value = "/image")
+    public ResponseEntity<Void> handleOptions() {
+        return ResponseEntity.ok()
+                .header("Access-Control-Allow-Origin", "https://effortless-douhua-d77333.netlify.app")
+                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Authorization, Content-Type")
+                .build();
+    }
+
         @PostMapping("/")
         public ImageDto save(@ModelAttribute ImageDto imageDto,
                              @RequestParam("placeId") String placeId,

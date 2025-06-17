@@ -16,6 +16,15 @@ public class PersonController {
 
         private final PersonService personService;
 
+        @RequestMapping(method = RequestMethod.OPTIONS, value = "/account")
+        public ResponseEntity<Void> handleAccountOptions() {
+                return ResponseEntity.ok()
+                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                        .header("Access-Control-Allow-Headers", "Authorization")
+                        .build();
+        }
+
         @GetMapping("/account")
         public PersonDto getPersonData(@RequestHeader("Authorization") String token) {
                 try {

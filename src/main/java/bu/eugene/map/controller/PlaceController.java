@@ -5,6 +5,7 @@ import bu.eugene.map.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,15 @@ import java.util.List;
 public class PlaceController {
 
     private final PlaceService placeService;
+
+    @RequestMapping(method = RequestMethod.OPTIONS, value = "/place")
+    public ResponseEntity<Void> handleAccountOptions() {
+        return ResponseEntity.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Authorization")
+                .build();
+    }
 
     @GetMapping("/find")
     public List<PlaceDto> findByCityName(@RequestParam String cityName) {
