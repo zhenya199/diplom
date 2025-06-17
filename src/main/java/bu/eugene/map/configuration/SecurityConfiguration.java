@@ -3,6 +3,8 @@ package bu.eugene.map.configuration;
 import bu.eugene.map.filter.JwtFilter;
 import bu.eugene.map.oauth2.CustomOidcUserService;
 import bu.eugene.map.oauth2.OAuth2AuthenticationSuccessHandler;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,6 +49,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
 
+            .addFilterBefore((request, response, chain) -> {
+                if ("OPTIONS".equalsIgnoreCase(((HttpServletRequest) request).getMethod())) {
+                    ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_OK);
+                    return;
+                }
+                chain.doFilter(request, response);
+            }, ChannelProcessingFilter.class)
+
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -65,8 +78,7 @@ public class SecurityConfiguration {
                         .userInfoEndpoint(
                                 userInfo -> userInfo.oidcUserService(customOidcUserService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
-                )
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                );
         return http.build();
     }
 
