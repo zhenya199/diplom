@@ -9,6 +9,7 @@ FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=builder /build/target/map-0.0.1-SNAPSHOT.jar app.jar
 RUN mkdir -p /app/uploads
+VOLUME /app/uploads
 ENV SAVING_DIR=/app/uploads
 ENV GEOAPIFY_SECRET=${GEOAPIFY_SECRET}
 ENV CLIENT_ID=86ad74aa384547249f62827e4a190907

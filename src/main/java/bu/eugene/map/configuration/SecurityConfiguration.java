@@ -46,7 +46,8 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/auth/registration",
                             "/public/**",
                             "/css/**",
-                            "/js/**").permitAll();
+                            "/js/**",
+                            "/uploads/**").permitAll();
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/tutor/**").hasRole("TUTOR");
                     auth.anyRequest().permitAll();
