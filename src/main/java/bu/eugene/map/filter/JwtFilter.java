@@ -38,11 +38,15 @@ public class JwtFilter extends GenericFilterBean {
                          FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        if (request.getMethod().equals("OPTIONS")) {
-            filterChain.doFilter(request, servletResponse);
-            return;
-        }
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+            response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setStatus(HttpServletResponse.SC_OK);
+            return; // Не пропускаем дальше
+        }
         String token = jwtUtil.extractTokenFromHeader(request);
         try {
             if (token != null) {
@@ -57,7 +61,7 @@ public class JwtFilter extends GenericFilterBean {
         } catch (JWTVerificationException e) {
             log.error("JWT verification failed: {}", e.getMessage());
         }
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(servletRequest, response);
     }
 
     private void sendErrorResponse(HttpServletResponse response) throws IOException {
