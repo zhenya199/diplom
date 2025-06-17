@@ -51,10 +51,10 @@ public class ImageService {
 
         private final String[] IMAGE_EXTENSIONS = new String[]{"jpg", "jpeg", "png"};
 
-        public ImageDto saveImage(ImageDto imageDto, Place place, Person person) {
+        public ImageDto saveImage(ImageDto imageDto, MultipartFile file, Place place, Person person) {
                 ImageEntity image = dto2EntityConverter.convertImageDto2ImageEntity(imageDto);
                 image.setPerson(person);
-                image.setPathToFile(saveImagesLocal(imageDto.getImage()));
+                image.setPathToFile(saveImagesLocal(file));
                 image.setPlace(place);
                 return imageMapper.image2Dto(imageRepository.save(image));
         }
