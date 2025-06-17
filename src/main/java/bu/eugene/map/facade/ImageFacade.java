@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class ImageFacade {
         private final ImageService imageService;
         private final PlaceService placeService;
 
-        public ImageDto saveImage(ImageDto imageDto, MultipartFile file, String placeId, String token) {
+        public ImageDto saveImage(ImageDto imageDto, String placeId, String token) {
             return imageService.saveImage(imageDto,
                     placeService.findById(placeId),
                     personService.getPersonFromToken(token));
