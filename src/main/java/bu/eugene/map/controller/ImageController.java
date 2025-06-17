@@ -15,25 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/image")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:8080", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 public class ImageController {
 
         private final ImageService imageService;
         private final ImageFacade imageFacade;
 
-    @RequestMapping(method = RequestMethod.OPTIONS, value = "/image")
-    public ResponseEntity<Void> handleOptions() {
-        return ResponseEntity.ok()
-                .header("Access-Control-Allow-Origin", "https://effortless-douhua-d77333.netlify.app")
-                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Authorization, Content-Type")
-                .build();
-    }
-
-        @PostMapping("/")
+        @PostMapping
         public ImageDto save(@ModelAttribute ImageDto imageDto,
                              @RequestParam("placeId") String placeId,
-                             @RequestHeader("Authorization") String token) {
+                             @RequestHeader("Authorization") String token   ) {
             return imageFacade.saveImage(imageDto, placeId, token);
         }
 

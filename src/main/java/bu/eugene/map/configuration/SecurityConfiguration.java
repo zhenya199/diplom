@@ -46,16 +46,13 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .addFilterBefore(filter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-
-            .addFilterBefore((request, response, chain) -> {
-                if ("OPTIONS".equalsIgnoreCase(((HttpServletRequest) request).getMethod())) {
-                    ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_OK);
-                    return;
-                }
-                chain.doFilter(request, response);
-            }, ChannelProcessingFilter.class)
 
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 
@@ -84,14 +81,14 @@ public class SecurityConfiguration {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://effortless-douhua-d77333.netlify.app"));
-        config.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        config.setAllowCredentials(true);
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*")); // Разрешаем все origins (для production укажите конкретные)
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*")); // Разрешаем все заголовки
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type")); // Какие заголовки можно читать фронтенду
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
