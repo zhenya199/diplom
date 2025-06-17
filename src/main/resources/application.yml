@@ -44,7 +44,7 @@ geoapify:
 server:
   port: ${PORT:8080}
   servlet:
-    context-path: /api
+    context-path: /backend
 saving_dir: ${SAVING_DIR}
 
 
