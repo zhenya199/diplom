@@ -39,6 +39,10 @@ public class JwtFilter extends GenericFilterBean {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        if ("OPTIONS".equals(request.getMethod())) {
+            filterChain.doFilter(request, servletResponse);
+            return;
+        }
         String token = jwtUtil.extractTokenFromHeader(request);
         try {
             if (token != null) {
