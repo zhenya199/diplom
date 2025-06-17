@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/route")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 public class RouteController {
 
     private final RouteService routeService;

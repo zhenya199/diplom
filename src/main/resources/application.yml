@@ -32,8 +32,19 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
+
 geoapify:
   secret: ${GEOAPIFY_SECRET}
 server:
   port: ${PORT:8080}
+  servlet:
+    context-path: /api
 saving_dir: ${SAVING_DIR}
+
+

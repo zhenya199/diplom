@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                         exceptionHandling.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/registration",
+                    auth.requestMatchers("/api/auth/registration",
                             "/public/**",
                             "/css/**",
                             "/js/**",

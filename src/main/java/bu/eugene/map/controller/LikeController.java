@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/like")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 public class LikeController {
 
         private final LikeService likeService;
         private final LikeFacade likeFacade;
 
-        @RequestMapping(method = RequestMethod.OPTIONS, value = "/lik")
+        @RequestMapping(method = RequestMethod.OPTIONS, value = "/likу")
         public ResponseEntity<Void> handleAccountOptions() {
                 return ResponseEntity.ok()
                         .header("Access-Control-Allow-Origin", "*")
