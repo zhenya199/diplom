@@ -5,6 +5,7 @@ import bu.eugene.map.oauth2.CustomOidcUserService;
 import bu.eugene.map.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -48,6 +49,7 @@ public class SecurityConfiguration {
                             "/css/**",
                             "/js/**",
                             "/uploads/**").permitAll();
+                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/tutor/**").hasRole("TUTOR");
                     auth.anyRequest().permitAll();
