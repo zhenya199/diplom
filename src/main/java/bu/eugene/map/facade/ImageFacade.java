@@ -27,7 +27,6 @@ public class ImageFacade {
 
         public ImageDto saveImage(ImageDto imageDto, MultipartFile file, String placeId, String token) {
             return imageService.saveImage(imageDto,
-                    file,
                     placeService.findById(placeId),
                     personService.getPersonFromToken(token));
         }
