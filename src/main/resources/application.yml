@@ -1,4 +1,9 @@
 spring:
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+
   main:
       allow-circular-references: true
   mail:
@@ -46,5 +51,8 @@ server:
   servlet:
     context-path: /backend
 saving_dir: ${SAVING_DIR}
+
+access_key: ${ACCESS_KEY}
+secret_key: ${SECRET_KEY}
 
 

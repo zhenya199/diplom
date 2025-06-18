@@ -45,7 +45,11 @@ public class ImageService {
         private final ImageMapper imageMapper;
         private final PersonService personService;
         @Value("${saving_dir}")
-        private String  UPLOAD_DIR ;
+        private String  UPLOAD_DIR;
+
+        private final R2StorageService r2StorageService;
+
+        private final String PUBLIC_URL = "https://pub-71a295251a0341f6a5f6985c64959b7f.r2.dev";
 
         private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -132,28 +136,15 @@ public class ImageService {
         }
 
         public String saveImagesLocal(MultipartFile file) {
-                // 1. Проверяем, не пустой ли файл
                 if (file.isEmpty()) {
                         throw new FileUploadException("Файл не может быть пустым");
                 }
 
-                // 2. Создаем директорию для загрузок
-                File uploadDir = new File(UPLOAD_DIR);
-                if (!uploadDir.exists()) {
-                        if (!uploadDir.mkdirs()) {
-                                log.error("Не удалось создать директорию: {}", UPLOAD_DIR);
-                                throw new FileUploadException("Ошибка при создании директории для загрузки");
-                        }
-                        log.info("Директория для загрузки создана: {}", UPLOAD_DIR);
-                }
-
                 try {
-                        // 3. Проверяем размер файла
                         if (file.getSize() > MAX_FILE_SIZE) {
                                 throw new MaxUploadSizeExceededException(MAX_FILE_SIZE);
                         }
 
-                        // 4. Проверяем расширение файла
                         String originalFilename = file.getOriginalFilename();
                         if (originalFilename == null || originalFilename.isEmpty()) {
                                 throw new FileUploadException("Имя файла не может быть пустым");
@@ -167,19 +158,15 @@ public class ImageService {
                                         String.join(", ", IMAGE_EXTENSIONS));
                         }
 
-                        // 5. Создаем уникальное имя файла
                         String uniqueFilename = createUniqueFilename(baseName, extension);
-                        File destinationFile = new File(uploadDir, uniqueFilename);
 
-                        try (InputStream inputStream = file.getInputStream()) {
-                                Files.copy(inputStream, destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        }
+                        String fileUrl = r2StorageService.uploadFile(file, uniqueFilename);
 
-                        log.info("Файл успешно сохранен: {}", destinationFile.getAbsolutePath());
-                        return "/uploads/" + uniqueFilename;
+                        log.info("Файл успешно загружен в R2: {}", uniqueFilename);
+                        return fileUrl;
 
                 } catch (IOException e) {
-                        log.error("Ошибка при сохранении файла: {}", e.getMessage(), e);
+                        log.error("Ошибка при загрузке файла: {}", e.getMessage(), e);
                         throw new FileUploadException("Ошибка загрузки файла: " + e.getMessage());
                 }
         }
