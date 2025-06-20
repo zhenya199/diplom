@@ -18,7 +18,6 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
 
     @Query(value = "SELECT * FROM place p " +
             "WHERE p.street LIKE %:searchTerm% " +
-            "OR p.house_number LIKE %:searchTerm% " +
             "OR p.name LIKE %:searchTerm% " +
             "OR p.suburb LIKE %:searchTerm% " +
             "OR p.street LIKE %:searchTerm% ",
