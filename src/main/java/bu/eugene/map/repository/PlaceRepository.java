@@ -21,6 +21,6 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
             "OR p.name ILIKE '%' || :searchTerm || '%' " +
             "OR p.suburb ILIKE '%' || :searchTerm || '%'",
             nativeQuery = true)
-    List<Place> findByParamIgnoreCase(@Param("searchTerm") String name);
+    Page<Place> findByParamIgnoreCase(@Param("searchTerm") String name, Pageable pageable);
 
 }

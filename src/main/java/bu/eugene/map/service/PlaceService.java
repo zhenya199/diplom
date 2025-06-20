@@ -48,14 +48,14 @@ public class PlaceService {
             );
         }
 
-        public List<PlaceDto> findByParam(String param) {
-            List<Place> places = placeRepository.findByParamIgnoreCase(capitalizeFirstLetter(param));
+        public Page<PlaceDto> findByParam(String param, Pageable pageable) {
+            Page<Place> places = placeRepository.findByParamIgnoreCase(capitalizeFirstLetter(param), pageable);
 
             if (places.isEmpty()) {
                 throw new PlaceNotFoundException("ошибка поиска места");
             }
 
-            return places.stream().map(placeMapper::place2Dto).toList();
+            return places.map(placeMapper::place2Dto);
         }
 
     public static String capitalizeFirstLetter(String word) {
