@@ -133,6 +133,9 @@ public class PlaceService {
             if (result.has("street")) {
 
                 String street = result.getString("street");
+                if (street.contains("улица")) {
+                    street = street.replace("улица","");
+                }
                 if (result.has("housenumber")) {
                     String houseNumber = result.getString("housenumber");
                     street = street + " " + houseNumber;
