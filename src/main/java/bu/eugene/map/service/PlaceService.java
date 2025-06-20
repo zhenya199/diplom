@@ -111,11 +111,16 @@ public class PlaceService {
             if(result.has("country_code") &&
                 result.getString("country_code")
                         .equals(BELARUS_COUNTRY_CODE)) {
-            if (result.has("name")) {
-                placeDto.setName(result.getString("name"));
-            } else {
-                placeDto.setName(result.getString("city"));
-            }
+                if (result.has("name")) {
+                    String name = result.getString("name");
+                    if (name.matches("[a-zA-Zа-яА-Я]+")) {  // Проверка на буквы (латинские и русские)
+                        placeDto.setName(name);
+                    } else {
+                        placeDto.setName(result.getString("city"));
+                    }
+                } else {
+                    placeDto.setName(result.getString("city"));
+                }
             placeDto.setTypeOfPlace(result.getString("result_type"));
             placeDto.setLat(result.getDouble("lat"));
             placeDto.setLon(result.getDouble("lon"));
