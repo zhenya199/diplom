@@ -17,11 +17,10 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
     Optional<Place> findByPlaceId(String placeId);
 
     @Query(value = "SELECT * FROM place p " +
-            "WHERE p.street LIKE %:searchTerm% " +
-            "OR p.name LIKE %:searchTerm% " +
-            "OR p.suburb LIKE %:searchTerm% " +
-            "OR p.street LIKE %:searchTerm% ",
+            "WHERE p.street ILIKE '%' || :searchTerm || '%' " +
+            "OR p.name ILIKE '%' || :searchTerm || '%' " +
+            "OR p.suburb ILIKE '%' || :searchTerm || '%'",
             nativeQuery = true)
-    Optional<Place> findByParamIgnoreCase(@Param("searchTerm") String name);
+    List<Place> findByParamIgnoreCase(@Param("searchTerm") String name);
 
 }

@@ -48,14 +48,29 @@ public class PlaceService {
             );
         }
 
-        public PlaceDto findByParam(String param) {
-            Place place = placeRepository.findByParamIgnoreCase(param)
-                    .orElseThrow(() -> new PlaceNotFoundException("ошибка поиска места"));
+        public List<PlaceDto> findByParam(String param) {
+            List<Place> places = placeRepository.findByParamIgnoreCase(capitalizeFirstLetter(param));
 
-            return placeMapper.place2Dto(place);
+            if (places.isEmpty()) {
+                throw new PlaceNotFoundException("ошибка поиска места");
+            }
+
+            return places.stream().map(placeMapper::place2Dto).toList();
         }
 
-        @Transactional
+    public static String capitalizeFirstLetter(String word) {
+        if (word == null || word.isEmpty()) {
+            return word;
+        }
+        char firstChar = word.charAt(0);
+        if (Character.isUpperCase(firstChar)) {
+            return word;
+        }
+        return Character.toUpperCase(firstChar) + word.substring(1);
+    }
+
+
+    @Transactional
         public List<PlaceDto> getAllPlaces() {
             return placeRepository.findAll()
                     .stream()
@@ -138,7 +153,7 @@ public class PlaceService {
                 }
                 if (result.has("housenumber")) {
                     String houseNumber = result.getString("housenumber");
-                    street = street + " " + houseNumber;
+                    street = street + "" + houseNumber;
                     placeDto.setStreet(street);
                 }
                 placeDto.setStreet(street);
