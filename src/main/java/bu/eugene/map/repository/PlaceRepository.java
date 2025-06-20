@@ -16,11 +16,13 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
 
     Optional<Place> findByPlaceId(String placeId);
 
-    @Query("SELECT p FROM Place p " +
-            "WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) " +
-            "OR LOWER(p.country) LIKE LOWER(CONCAT('%', :name, '%')) " +
-            "OR LOWER(p.typeOfPlace) LIKE LOWER(CONCAT('%', :name, '%')) " +
-            "OR LOWER(p.suburb) LIKE LOWER(CONCAT('%', :name, '%'))")
-    Optional<Place> findByParamIgnoreCase(@Param("name") String name);
+    @Query(value = "SELECT * FROM place p " +
+            "WHERE p.street LIKE %:searchTerm% " +
+            "OR p.house_number LIKE %:searchTerm% " +
+            "OR p.name LIKE %:searchTerm% " +
+            "OR p.suburb LIKE %:searchTerm% " +
+            "OR p.street LIKE %:searchTerm% ",
+            nativeQuery = true)
+    Optional<Place> findByParamIgnoreCase(@Param("searchTerm") String name);
 
 }

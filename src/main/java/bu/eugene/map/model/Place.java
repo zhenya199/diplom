@@ -36,6 +36,8 @@ public class Place {
 
         private String suburb;
 
+        private String street;
+
         @Column(name = "rate")
         private Double placeRate;
 

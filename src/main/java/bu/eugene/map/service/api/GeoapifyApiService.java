@@ -26,7 +26,7 @@ public class GeoapifyApiService {
         @Value("${geoapify.secret}")
         private String secret;
 
-        public  String getCoordinates(String cityName) {
+        public String getCoordinates(String cityName) {
                 try {
                         log.info("try to send a request to Geoapify API");
 

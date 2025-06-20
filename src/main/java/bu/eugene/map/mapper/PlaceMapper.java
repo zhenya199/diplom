@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public interface PlaceMapper {
 
     @Mapping(source = "images", target = "images", qualifiedByName = "convertImages")
+    @Mapping(source = "street", target="street")
     PlaceDto place2Dto(Place place);
 
     List<PlaceDto> placeListToDtoList(List<Place> places);

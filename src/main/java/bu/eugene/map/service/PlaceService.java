@@ -111,7 +111,11 @@ public class PlaceService {
             if(result.has("country_code") &&
                 result.getString("country_code")
                         .equals(BELARUS_COUNTRY_CODE)) {
-            placeDto.setName(result.getString("city"));
+            if (result.has("name")) {
+                placeDto.setName(result.getString("name"));
+            } else {
+                placeDto.setName(result.getString("city"));
+            }
             placeDto.setTypeOfPlace(result.getString("result_type"));
             placeDto.setLat(result.getDouble("lat"));
             placeDto.setLon(result.getDouble("lon"));
@@ -120,6 +124,19 @@ public class PlaceService {
             if (result.has("suburb")) {
                 placeDto.setSuburb(result.getString("suburb"));
             }
+
+            if (result.has("street")) {
+
+                String street = result.getString("street");
+                if (result.has("housenumber")) {
+                    String houseNumber = result.getString("housenumber");
+                    street = street + " " + houseNumber;
+                    placeDto.setStreet(street);
+                }
+                placeDto.setStreet(street);
+            }
+
+
         }
             return placeDto;
      }

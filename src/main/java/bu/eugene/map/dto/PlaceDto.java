@@ -16,6 +16,7 @@ public class PlaceDto {
         private Double lat;
         private Double lon;
         private String country;
+        private String street;
         private String typeOfPlace;
         private String suburb;
         private String placeId;
