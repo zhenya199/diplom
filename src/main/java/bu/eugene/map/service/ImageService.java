@@ -63,6 +63,11 @@ public class ImageService {
                 return imageMapper.image2Dto(imageRepository.save(image));
         }
 
+        public void deleteImageById(Integer imageId) {
+                ImageEntity image = getImageById(imageId);
+                imageRepository.delete(image);
+        }
+
         public ImageEntity saveImageWithoutPlace(ImageDto imageDto, RouteEntity route) {
                 ImageEntity image = new ImageEntity();
                 image.setPathToFile(saveImagesLocal(imageDto.getImage()));

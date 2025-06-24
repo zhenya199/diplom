@@ -63,6 +63,9 @@ public class RouteService {
 
         if (routeEntity.getAuthor().equals(currentUser) ||
                 currentUser.getRole().equals("ADMIN")) {
+            for (ImageEntity imageEntity : routeEntity.getImages()) {
+                imageService.deleteImageById(imageEntity.getId());
+            }
            routeRepository.delete(routeEntity);
         } else {
             throw new CannotDeleteRouteException("Ошибка удаления маршрута");
