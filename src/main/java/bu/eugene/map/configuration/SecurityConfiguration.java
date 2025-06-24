@@ -83,7 +83,7 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*")); // Разрешаем все origins (для production укажите конкретные)
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*")); // Разрешаем все заголовки
         configuration.setExposedHeaders(List.of("Authorization", "Content-Type")); // Какие заголовки можно читать фронтенду
 
